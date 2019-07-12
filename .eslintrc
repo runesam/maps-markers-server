@@ -3,8 +3,8 @@
     "airbnb"
   ],
   "globals": {
-    "document": true,
-    "window": true,
+    "__dirname": true,
+    "global": true,
     "jest": true,
     "describe": true,
     "it": true,
@@ -30,15 +30,17 @@
     }
   },
   "rules": {
-    "no-underscore-dangle": 0,
-    "no-tabs": 0,
     "indent": 0,
-    "import/no-extraneous-dependencies": 0,
-    "react/jsx-filename-extension": 0,
-    "react/jsx-indent": 0,
+    "no-tabs": 0,
+    "no-bitwise": 0,
+    "no-console": 0,
     "global-require": 0,
+    "react/jsx-indent": 0,
+    "no-underscore-dangle": 0,
+    "react/jsx-indent-props": 0,
     "react/forbid-prop-types": 0,
-    "react/jsx-indent-props": 0
+    "react/jsx-filename-extension": 0,
+    "import/no-extraneous-dependencies": 0
   },
   "settings": {
     "import/resolver": {
