@@ -66,7 +66,7 @@ describe('markers', () => {
         it('updates the provided marker, trigger the updateMarkersJSON and return the provided marker', () => {
             markersModule.markers = [{ id: 1, name: 'test1' }, { id: 5, name: 'test5' }];
 
-            const markerToUpdate = { id: 5, name: 'test7' };
+            const markerToUpdate = { id: 10, name: 'test7', idToReplace: 5 };
             const spy = jest.spyOn(markersModule, 'updateMarkersJSON');
             const result = markersModule.updateMarker(markerToUpdate);
 
@@ -105,6 +105,14 @@ describe('markers', () => {
             expect(spy).toHaveBeenCalledTimes(1);
             expect(addedMarker).toEqual(markerToAdd);
             expect(markersModule.markers.length).toBe(3);
+        });
+
+        it('returns error if the marker already exist', () => {
+            markersModule.markers = [{ id: 1, name: 'test1' }, { id: 5, name: 'test5' }];
+
+            const markerToAdd = { id: 1, name: 'test6' };
+            const result = markersModule.addMarker(markerToAdd);
+            expect(result).toEqual({ error: 'marker already exist' });
         });
     });
 

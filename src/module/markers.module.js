@@ -26,8 +26,8 @@ class Markers {
         return this.markers;
     }
 
-    updateMarker(marker: { id: string }) {
-        const markerIndex = this.markers.findIndex(item => item.id === marker.id);
+    updateMarker(marker: { idToReplace: string, id: string }) {
+        const markerIndex = this.markers.findIndex(item => item.id === marker.idToReplace);
         if (~markerIndex) {
             this.markers[markerIndex] = marker;
             this.updateMarkersJSON();
@@ -37,6 +37,10 @@ class Markers {
     }
 
     addMarker(marker: { id: string }) {
+        const markerIndex = this.markers.findIndex(item => item.id === marker.id);
+        if (~markerIndex) {
+            return { error: 'marker already exist' };
+        }
         this.markers.push(marker);
         this.updateMarkersJSON();
         return marker;
