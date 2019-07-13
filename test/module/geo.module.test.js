@@ -40,12 +40,5 @@ describe('geo.module', () => {
 
             expect(actual).toEqual(expected);
         });
-
-        it('returns an empty plain object if API_QUERIES is false', () => {
-            delete process.env.API_QUERIES;
-
-            const actual = getQueries('test');
-            expect(actual).toEqual({});
-        });
     });
 });
