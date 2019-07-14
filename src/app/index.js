@@ -24,9 +24,9 @@ app.use(bodyParser.json());
 app.get('/geo/:address', (req, res) => {
     const { address } = req.params;
     findAddress(address)
-        .then(({ data }) => {
-            if (data && data.status !== 'OK') {
-                res.status(404);
+        .then((data: { error:?string, status:? number }) => {
+            if (data.error) {
+                res.status(data.status);
                 return res.send(data);
             }
             res.status(200);
@@ -40,7 +40,6 @@ app.get('/geo/:address', (req, res) => {
 
 app.get('/user', (req, res) => {
     const markers = markersModule.getMarkers();
-    console.log(markers);
     res.status(200);
     res.send({ key, markers });
 });

@@ -26,7 +26,7 @@ describe('app', () => {
             request(app)
                 .get('/geo/grunewaldStr./')
                 .expect(200)
-                .expect(res => expect(res.body).toEqual(response.data))
+                .expect(res => expect(res.body).toEqual(response))
                 .end((err) => {
                     if (err) {
                         done.fail(err);
@@ -38,18 +38,22 @@ describe('app', () => {
                 });
         });
 
-        it('returns 404 when status is not OK', (done) => {
-            const response = { data: { status: 'Not Found' } };
+        it('returns right status code if there was error', (done) => {
+            const response = { status: 400, error: 'error message' };
             geoModule.findAddress.mockResolvedValue(response);
 
             request(app)
                 .get('/geo/grunewaldStr.')
-                .expect(404)
+                .expect(response.status)
                 .expect(res => expect(res.body).toEqual(response))
-                .end(() => {
-                    expect(spy).toHaveBeenCalledTimes(1);
-                    expect(spy).toHaveBeenCalledWith('grunewaldStr.');
-                    done();
+                .end((err) => {
+                    if (err) {
+                        done.fail(err);
+                    } else {
+                        expect(spy).toHaveBeenCalledTimes(1);
+                        expect(spy).toHaveBeenCalledWith('grunewaldStr.');
+                        done();
+                    }
                 });
         });
 
@@ -59,12 +63,16 @@ describe('app', () => {
 
             request(app)
                 .get('/geo/grunewaldStr.')
-                .expect(404)
+                .expect(500)
                 .expect(res => expect(res.body).toEqual(reason))
-                .end(() => {
-                    expect(spy).toHaveBeenCalledTimes(1);
-                    expect(spy).toHaveBeenCalledWith('grunewaldStr.');
-                    done();
+                .end((err) => {
+                    if (err) {
+                        done.fail(err);
+                    } else {
+                        expect(spy).toHaveBeenCalledTimes(1);
+                        expect(spy).toHaveBeenCalledWith('grunewaldStr.');
+                        done();
+                    }
                 });
         });
     });

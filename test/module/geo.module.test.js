@@ -1,5 +1,5 @@
 import http from 'utils/http';
-import { findAddress, getQueries } from 'module/geo.module';
+import * as geoModule from 'module/geo.module';
 
 const {
     GEO_URL,
@@ -15,15 +15,23 @@ describe('geo.module', () => {
         });
 
         it('calls fetch from node-fetch with the right arguments', (done) => {
-            const response = { status: 'OK', result: 'test result' };
+            const response = {
+                data: {
+                    status: 'OK',
+                    results: [{ id: 'id', name: 'name', geometry: { location: { lat: 1, lng: 2 } } }],
+                },
+            };
+            const expected = {
+                id: 'id', lat: 1, lng: 2, name: 'name',
+            };
             http.get.mockResolvedValue(response);
 
-            findAddress('test').then((res) => {
-                const params = getQueries('test');
+            geoModule.findAddress('test').then((res) => {
+                const params = geoModule.getQueries('test');
 
                 expect(spy).toHaveBeenCalledTimes(1);
                 expect(spy).toHaveBeenCalledWith(GEO_URL, { params });
-                expect(res).toEqual(response);
+                expect(res).toEqual([expected]);
                 done();
             });
         });
@@ -31,7 +39,7 @@ describe('geo.module', () => {
 
     describe('getQueries method', () => {
         it('returns a plain object with params to be sent', () => {
-            const actual = getQueries('test');
+            const actual = geoModule.getQueries('test');
 
             const expected = JSON.parse(API_QUERIES || '[]').reduce((acc, key) => {
                 acc[key] = key === UNIQUE_QUERY ? 'test' : process.env[key];
